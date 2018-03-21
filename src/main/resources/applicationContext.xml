@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/aop
+	 http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!-- 开启包扫描，指定扫描包的路径,如果想分包扫描，可以用,隔开，分别进行扫描,*通配符，也可以使用 -->
+    <context:component-scan base-package="com.bantu.ssm"></context:component-scan>
+    <!-- 加载配置文件 -->
+   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       <property name="location" value="classpath:dbcp.properties"></property>
+   </bean>
+   <!-- 配置数据源(使用dbcp连接池技术) -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <!-- 初始化连接大小 -->
+	    <property name="initialSize" value="${initialSize}"></property>
+	    <!-- 连接池最大数量 -->
+	    <property name="maxActive" value="${maxActive}"></property>
+	    <!-- 连接池最大空闲 -->
+	    <property name="maxIdle" value="${maxIdle}"></property>
+	    <!-- 连接池最小空闲 -->
+	    <property name="minIdle" value="${minIdle}"></property>
+	    <!-- 获取连接最大等待时间 -->
+	    <property name="maxWait" value="${maxWait}"></property>
+    </bean>
+     <!-- 配置SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 加载数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+        <!-- 扫描mapper文件 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+     <!-- 开启dao接口扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描接口包路径，不需要加classpath，如果多个可以用“,”隔开 -->
+        <property name="basePackage" value="com.bantu.ssm.dao"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    
+     <!-- 配置事务 -->
+     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <!-- 加载数据源 -->
+      <property name="dataSource" ref="dataSource"></property>
+    </bean> 
+   <!-- 事务处理  -->
+   <!--    <aop:config>
+       <aop:pointcut expression="execution(* com.aaa.ssm.service..*.*(..))" id="trPointcut"/>
+        <aop:advisor advice-ref="trAdvice" pointcut-ref="trPointcut"/>
+    </aop:config>
+      <tx:advice id="trAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>  -->
+  <!--  开启注解事务，如果这种，类上面加上@Transactional <tx:annotation-driven transaction-manager="transactionManager"/> -->
+    <!-- 开启事务扫描 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 将AllBean交给容器 -->  
+    <!-- <bean id="allBean" class="com.bantu.ssm.servlet.AllBean"  /> -->
+</beans>

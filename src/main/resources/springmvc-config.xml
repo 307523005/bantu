@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	<!-- 开启包扫描 -->
+	<context:component-scan base-package="com.bantu.ssm.controller"></context:component-scan>
+	<!-- 开启springmvc的注解驱动 -->
+	<mvc:annotation-driven />
+	<!-- 配置拦截器 开始 -->
+	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/*/*.do"/> 
+		<bean class="com.bantu.ssm.interceptor.LoginInterceptor"></bean> </mvc:interceptor> 
+		</mvc:interceptors> -->
+	<!-- 配置拦截器 结束 -->
+	<!-- 上传配置 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10240000"></property>
+	</bean>
+	<!-- 配置视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 配置前缀（也就是文件夹名称） prefix suffix是固定值，不能改变 value值，会默认取WebRoot作为根目录 -->
+		<property name="prefix" value="/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<!-- 全局异常处理器 只要类实现了HandlerExceptionResolver接口，就是一个全局异常处理器 -->
+	<bean class="com.bantu.ssm.util.CustomException.CustomExceptionResolver" /> 
+</beans>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bantu.ssm.dao.feedback.FeedbackDao">
+	<!-- 得到所有反馈信息 -->
+	<select id="getPageList" resultType="com.bantu.ssm.entity.feedback.Feedback"
+		parameterType="HashMap">
+		select f.feedback_id
+		,f.feedback_uid,f.feedback_text,f.feedback_addtime,f.feedback_isdelete,u.user_phonebrand,u.user_phonemodel,u.user_wxversion,
+		u.user_pixelRatio, u.user_screenWidth, u.user_screenHeight,
+		u.user_windowWidth, u.user_windowHeight, u.user_language
+		,
+		u.user_system, u.user_platform, u.user_fontSizeSetting,
+		u.user_SDKVersion
+		from tb_feedback f LEFT JOIN tb_user u on
+		f.feedback_uid = u.user_uid
+		<where>
+			<choose>
+				<when test="parama!=null and parama!='' and paramb!=null and paramb!='' ">
+					and f.feedback_addtime between #{parama} and #{paramb}
+				</when>
+				<when test="parama!=null and parama!='' ">
+					and f.feedback_addtime = #{parama}
+				</when>
+				<when test="paramb!=null and paramb!='' ">
+					and f.feedback_addtime = #{paramb}
+				</when>
+				<otherwise>
+					and 1=1
+				</otherwise>
+			</choose>
+		</where>
+		<!--客户端平台 -->
+		<if test="paramc!=null and paramc!='' ">
+			and u.user_system like  CONCAT(CONCAT('%',#{paramc}),'%')
+		</if>
+		<if test="paramd!=null and paramd!='' ">
+			and f.feedback_isdelete = #{paramd}
+		</if>
+		<if test="sort!=null and sort!=''">
+			order by ${sort} ${order}
+		</if>
+		LIMIT #{page},#{rows}
+	</select>
+	<!-- 根据uid时间得到当天总数量 -->
+	<select id="getCountNow" parameterType="com.bantu.ssm.entity.feedback.Feedback"
+		resultType="com.bantu.ssm.entity.feedback.Feedback">
+
+		select feedback_id from tb_feedback where feedback_uid =
+		#{feedback_uid} and feedback_addtime = #{feedback_addtime}
+
+	</select>
+	<!-- 总数量 -->
+	<select id="getCount" parameterType="HashMap" resultType="int">
+
+		select count(*) from tb_feedback f LEFT JOIN tb_user u on
+		f.feedback_uid = u.user_uid
+		<where>
+			<choose>
+				<when test="parama!=null and parama!='' and paramb!=null and paramb!='' ">
+					and f.feedback_addtime between #{parama} and #{paramb}
+				</when>
+				<when test="parama!=null and parama!='' ">
+					and f.feedback_addtime = #{parama}
+				</when>
+				<when test="paramb!=null and paramb!='' ">
+					and f.feedback_addtime = #{paramb}
+				</when>
+				<otherwise>
+					and 1=1
+				</otherwise>
+			</choose>
+		</where>
+		<if test="paramc!=null and paramc!='' ">
+			and u.user_system like  CONCAT(CONCAT('%',#{paramc}),'%')
+		</if>
+		<if test="paramd!=null and paramd!='' ">
+			and f.feedback_isdelete = #{paramd}
+		</if>
+
+	</select>
+	<!-- 导出feedback_uid,time -->
+	<select id="getSumNow" parameterType="com.bantu.ssm.entity.feedback.Feedback"
+		resultType="com.bantu.ssm.entity.feedback.Feedback">
+		select f.feedback_id
+		,f.feedback_uid,f.feedback_text,f.feedback_addtime,f.feedback_isdelete,u.user_phonebrand,u.user_phonemodel,u.user_wxversion,
+		u.user_pixelRatio, u.user_screenWidth, u.user_screenHeight,
+		u.user_windowWidth, u.user_windowHeight, u.user_language
+		,
+		u.user_system, u.user_platform, u.user_fontSizeSetting,
+		u.user_SDKVersion
+		from tb_feedback f LEFT JOIN tb_user u on
+		f.feedback_uid = u.user_uid
+		<where>
+			<choose>
+				<when
+					test="begintime!=null and begintime!='' and endtime!=null and endtime!='' ">
+					and feedback_addtime between #{begintime!} and #{endtime!}
+				</when>
+				<when test="begintime!=null and begintime!='' ">
+					and feedback_addtime = #{begintime}
+				</when>
+				<when test="endtime!=null and endtime!='' ">
+					and feedback_addtime = #{endtime}
+				</when>
+				<otherwise>
+					and 1=1
+				</otherwise>
+			</choose>
+		</where>
+		<if test="feedback_isdelete!=null and feedback_isdelete!='' ">
+			and feedback_isdelete = #{feedback_isdelete}
+		</if>
+		<!--客户端平台 -->
+		<if test="user_system!=null and user_system!=''">
+			and user_system like CONCAT(CONCAT('%',#{user_system}),'%')
+		</if>
+		order by feedback_id asc
+
+	</select>
+
+	<!-- 添加 反馈信息 -->
+	<insert id="add" parameterType="com.bantu.ssm.entity.feedback.Feedback">
+		<!-- 使用实体传值，必须和属性完全一致 -->
+		insert into tb_feedback(feedback_uid,
+		feedback_text,
+		feedback_addtime,
+		feedback_isdelete
+		)
+		values(#{feedback_uid},#{feedback_text},#{feedback_addtime},0
+		)
+	</insert>
+	<!--删除 -->
+	<update id="delete" parameterType="string">
+		update tb_feedback
+		<set>
+			feedback_isdelete=1
+		</set>
+		where feedback_id = #{feedback_id}
+	</update>
+</mapper>

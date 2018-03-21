@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bantu.ssm.dao.emp.EmpDao">
+	<!-- 得到所有反馈信息 -->
+	<select id="getPageList" resultType="com.bantu.ssm.entity.emp.Emp"
+		parameterType="HashMap">
+		<!-- select f.feedback_id ,f.feedback_uid,f.feedback_text,f.feedback_addtime,f.feedback_isdelete,u.user_phonebrand,u.user_phonemodel,u.user_wxversion, 
+			u.user_pixelRatio, u.user_screenWidth, u.user_screenHeight, u.user_windowWidth, 
+			u.user_windowHeight, u.user_language , u.user_system, u.user_platform, u.user_fontSizeSetting, 
+			u.user_SDKVersion from tb_feedback f LEFT JOIN tb_user u on f.feedback_uid 
+			= u.user_uid <where> <choose> <when test="parama!=null and parama!='' and 
+			paramb!=null and paramb!='' "> and f.feedback_addtime between #{parama} and 
+			#{paramb} </when> <when test="parama!=null and parama!='' "> and f.feedback_addtime 
+			= #{parama} </when> <when test="paramb!=null and paramb!='' "> and f.feedback_addtime 
+			= #{paramb} </when> <otherwise> and 1=1 </otherwise> </choose> </where> 客户端平台 
+			<if test="paramc!=null and paramc!='' "> and u.user_system like CONCAT(CONCAT('%',#{paramc}),'%') 
+			</if> <if test="paramd!=null and paramd!='' "> and f.feedback_isdelete = 
+			#{paramd} </if> <if test="sort!=null and sort!=''"> order by ${sort} ${order} 
+			</if> LIMIT #{page},#{rows} -->
+	</select>
+	<!-- 总数量 -->
+	<select id="getCount" parameterType="HashMap" resultType="int">
+
+		<!-- select count(*) from tb_feedback f LEFT JOIN tb_user u on f.feedback_uid 
+			= u.user_uid <where> <choose> <when test="parama!=null and parama!='' and 
+			paramb!=null and paramb!='' "> and f.feedback_addtime between #{parama} and 
+			#{paramb} </when> <when test="parama!=null and parama!='' "> and f.feedback_addtime 
+			= #{parama} </when> <when test="paramb!=null and paramb!='' "> and f.feedback_addtime 
+			= #{paramb} </when> <otherwise> and 1=1 </otherwise> </choose> </where> <if 
+			test="paramc!=null and paramc!='' "> and u.user_system like CONCAT(CONCAT('%',#{paramc}),'%') 
+			</if> <if test="paramd!=null and paramd!='' "> and f.feedback_isdelete = 
+			#{paramd} </if> -->
+
+	</select>
+	<!-- 根据账号密码查询 -->
+	<select id="getListByEmp" parameterType="com.bantu.ssm.entity.emp.Emp"
+		resultType="com.bantu.ssm.entity.emp.Emp">
+		select emp_id,emp_password,emp_1,emp_2,emp_3
+		from tb_emp where emp_id = #{emp_id} and emp_password = #{emp_password}
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" parameterType="com.bantu.ssm.entity.emp.Emp">
+		<!-- 使用实体传值，必须和属性完全一致 -->
+		insert into tb_emp(emp_id,emp_password,emp_1,emp_2,emp_3
+		)
+		values(#{emp_id},#{emp_password},#{emp_1},#{emp_2},#{emp_3}
+		)
+	</insert>
+	<!--删除 -->
+	<delete id="delete" parameterType="com.bantu.ssm.entity.emp.Emp">
+		DELETE FROM tb_emp WHERE emp_id = #{emp_id}
+	</delete>
+</mapper>

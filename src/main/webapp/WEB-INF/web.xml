@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name></display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 配置spring监听器 开始 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 配置spring监听器 结束 -->
+	<!-- spring 中文乱码过滤器 开始 -->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- spring 中文乱码过滤器 结束 -->
+	<!-- 解决跨域问题开始 -->
+	<!-- 你过滤器的包HeadersCORSFilter -->
+	<filter>
+		<filter-name>cors</filter-name>
+		<filter-class>com.bantu.ssm.util.HeadersCORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>cors</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 你开放的接口前缀 <url-pattern>/open/*</url-pattern> -->
+	<!--解决跨域问题结束 -->
+	<!-- 配置springmvc总控制器 开始 -->
+	<servlet>
+		<servlet-name>springMvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 如果没有init-param这个配置，默认情况下必须有一个与这个servlet同名的(helloMvc)， 并且以helloMvc-servlet.xml结尾的配置文件 
+			并且命名空间必须是springbean配置一样的 -->
+		<!-- 如果想自定义文件路径 ，需要加入init-param -->
+		<init-param>
+			<!-- contextConfigLocation是固定，不能更改 -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc-config.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springMvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- 配置springmvc总控制器 结束 -->
+	<!-- 静态资源免过滤 开始 -->
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.jpg</url-pattern>
+		<url-pattern>*.png</url-pattern>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.gif</url-pattern>
+		<url-pattern>*.txt</url-pattern>
+	</servlet-mapping>
+	<!-- 静态资源免过滤 结束 -->
+	<!-- 启动时加载servlet获取accessToken -->
+	 <!-- <servlet>
+		<servlet-name>loadServlet</servlet-name>
+		<servlet-class>com.bantu.ssm.servlet.GetAccessTokenServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>  -->
+	<!-- 启动时加载servlet获取accessToken 结束 -->
+</web-app>
+

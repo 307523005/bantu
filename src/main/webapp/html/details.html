@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="divport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>版图--名片详情</title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+
+    <!-- <script>
+        (function flexible(window, document) {
+            var docEl = document.documentElement
+            var dpr = window.devicePixelRatio || 1
+
+            // adjust body font size
+            function setBodyFontSize() {
+                if (document.body) {
+                    document.body.style.fontSize = (12 * dpr) + 'px'
+                } else {
+                    document.addEventListener('DOMContentLoaded', setBodyFontSize)
+                }
+            }
+            setBodyFontSize();
+
+            // set 1rem = viewWidth / 10
+            function setRemUnit() {
+                var rem = docEl.clientWidth / 10
+                docEl.style.fontSize = rem + 'px'
+            }
+
+            setRemUnit()
+
+            // reset rem unit on page resize
+            window.addEventListener('resize', setRemUnit)
+            window.addEventListener('pageshow', function (e) {
+                if (e.persisted) {
+                    setRemUnit()
+                }
+            })
+
+            // detect 0.5px supports
+            if (dpr >= 2) {
+                var fakeBody = document.createElement('body')
+                var testElement = document.createElement('div')
+                testElement.style.border = '.5px solid transparent'
+                fakeBody.appendChild(testElement)
+                docEl.appendChild(fakeBody)
+                if (testElement.offsetHeight === 1) {
+                    docEl.classList.add('hairlines')
+                }
+                docEl.removeChild(fakeBody)
+            }
+        }(window, document))
+    </script> -->
+    <script>
+        ! function (e, t) {
+            function n() {
+                t.body ? t.body.style.fontSize = 12 * o + "px" : t.addEventListener("DOMContentLoaded", n)
+            }
+
+            function d() {
+                var e = i.clientWidth / 10;
+                i.style.fontSize = e + "px"
+            }
+            var i = t.documentElement,
+                o = e.devicePixelRatio || 1;
+            if (n(), d(), e.addEventListener("resize", d), e.addEventListener("pageshow", function (e) {
+                    e.persisted && d()
+                }), o >= 2) {
+                var a = t.createElement("body"),
+                    s = t.createElement("div");
+                s.style.border = ".5px solid transparent", a.appendChild(s), i.appendChild(a), 1 === s.offsetHeight &&
+                    i.classList.add("hairlines"), i.removeChild(a)
+            }
+        }(window, document);
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body,
+        .content {
+            height: 100%;
+            box-sizing: border-box;
+            background-color: #f1ece1;
+        }
+
+        .content {
+            padding-top: 0.34rem;
+            position: relative;
+        }
+        /*  header{
+            width: 100%;
+            height: 1.73rem;
+            background-color: bisque;
+        } */
+
+        .card,
+        .phone,
+        .www,
+        .brief {
+            width: 100%;
+            height: 1.46rem;
+            background-color: aquamarine;
+            color: black;
+            box-sizing: border-box;
+        }
+
+        .card {
+            height: 5.7rem;
+            /* height: 430px; */
+            background: url('http://www.fmlcfs.top/BT/bg_img/template_2.png') no-repeat center;
+            background-size: 100% 100%;
+            /* margin-top: 0.34rem; */
+        }
+
+        .card .name {
+            position: absolute;
+            top: 2.37rem;
+            left: 4.8rem;
+            font-size: 0.48rem;
+            font-weight: 600;
+            line-height: 0.77rem;
+        }
+
+        .card .post {
+            position: absolute;
+            top: 2.72rem;
+            right: 2.36rem;
+            font-size: 0.38rem;
+        }
+
+        .name .hr {
+            position: absolute;
+            height: 1px;
+            background-color: #505050;
+            width: 5rem;
+            bottom: -0.13rem;
+        }
+
+        .card .company {
+            position: absolute;
+            top: 3.33rem;
+            left: 4.96rem;
+            line-height: 0.72rem;
+            font-size: 0.32rem;
+        }
+
+        .card .mobile {
+            position: absolute;
+            top: 4rem;
+            left: 4.96rem;
+            line-height: 0.24rem;
+            font-size: 0.25rem;
+        }
+
+        .card .mobile_tel {
+            display: inline-block;
+        }
+
+        .phone {
+            margin-top: 0.26rem;
+            padding: 0 0.33rem;
+            background-color: #fff;
+        }
+
+        .phone .tal,
+        .phone .email,
+        .www .site,
+        .www .url,
+        .brief .intro {
+            box-sizing: border-box;
+            line-height: 0.73rem;
+            height: 0.73rem;
+            border-bottom: 1px solid #ccc;
+            padding-left: 10px;
+        }
+
+        .www {
+            margin-top: 0.2rem;
+            padding: 0 0.33rem;
+            background-color: #fff;
+        }
+
+        .brief {
+            margin-top: 0.2rem;
+            height: 3.2rem;
+            padding: 0 0.33rem;
+            background-color: #fff;
+        }
+
+        .brief .scope {
+            box-sizing: border-box;
+            line-height: 0.73rem;
+            height: 2.47rem;
+            padding-left: 10px;
+        }
+
+        .button {
+            box-sizing: border-box;
+            margin-top: 1.66rem;
+            width: 100%;
+            padding: 0 0.33rem;
+            padding-bottom: 0.74rem;
+        }
+
+        .button button {
+            width: 100%;
+            height: 0.8rem;
+            /* height: 60px; */
+            outline: 0;
+            background-color: #6b594b;
+            border: 1 solid rgba(0, 0, 0, 0.3);
+            color: aliceblue;
+            font-size: 0.35rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <header></header>
+        <div class="card">
+            <div class="name" id="name">杨琦
+                <div class="hr"></div>
+            </div>
+            <div class="post" id="post">董事长</div>
+
+            <div class="company" id="company">四川东辰投资有限公司</div>
+            <div class="mobile">手机：
+                <div class="mobile_tel" id="mobile">18888888888</div>
+            </div>
+        </div>
+        <div class="phone">
+            <div class="tal">
+                电话：
+                <span id="tal"></span>
+            </div>
+            <div class="email">
+                邮箱：
+                <span id="email"></span>
+            </div>
+        </div>
+        <div class="www">
+            <div class="site">
+                地址：
+                <span id="site"></span>
+            </div>
+            <div class="url">
+                网址：
+                <span id="url"></span>
+            </div>
+        </div>
+        <div class="brief">
+            <div class="intro">
+                公司简介：
+                <span id="intro"></span>
+            </div>
+            <div class="scope">
+                经营范围：
+                <span id="scope"></span>
+            </div>
+        </div>
+        <div class="button">
+            <button>设置名片</button>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        // 封装正则--用来获取url地址后的参数
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+        var content = $('#content');
+        var key = GetQueryString('k');
+        var uid = GetQueryString('uid');
+        var cid = GetQueryString('cid');
+
+        // 获取需要动态赋值的ID
+        var namee = $("#name");
+        var post = $("#post");
+        var company = $("#company");
+        var mobile = $("#mobile");
+        var tal = $("#tal");
+        var email = $("#email");
+        var site = $("#site");
+        var url = $("#url");
+        var intro = $("#intro");
+        var scope = $("#scope");
+
+        // 请求获取数据 $.post(url,data,success(data, textStatus, jqXHR),dataType)
+        $.post('http://192.168.2.115:8080/bantu/CreateConnect/getCardAadRedPacket', {
+            k: key,
+            uid: uid,
+            cid: cid
+        }, function (res) {
+            var data = res.resObject[0];
+            namee.html(data.mycard_name);
+            post.html(data.mycard_position);
+            company.html(data.mycard_companyname);
+            mobile.html(data.mycard_mobile);
+            tal.html(data.mycard_phone);
+            email.html(data.mycard_mail);
+            site.html(data.mycard_add);
+            url.html(data.mycard_website);
+            intro.html(data.mycard_profile);
+            scope.html(data.mycard_scope);
+            console.log();
+        }, 'JSON');
+    });
+    /* 
+
+1 获取code 在确保微信公众账号拥有授权作用域（scope参数）的权限的前提下（服务号获得高级接口后，默认拥有scope参数中的snsapi_base和snsapi_userinfo），引导关注者打开如下页面： 
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba6f729bc6aa5ddc&redirect_uri=http://192.168.2.109/details.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+     */
+</script>
+
+</html>

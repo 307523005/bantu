@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.bantu.ssm.dao.connect.CreateConnectDao">
+  <!-- 得到所有信息 -->
+   <select id="getList" resultType="com.bantu.ssm.entity.specificCode.SpecificCode">
+   select specificCode_id ,specificCode_userid, specificCode_code,specificCode_picpath,specificCode_shorturl,specificCode_addtime,specificCode_longurl
+   from tb_specificcode  
+
+   </select>
+    <!-- 根据specificCode_code查询对象   当语句里面只有一个 参数的时候，参数名称可以为任意名称-->
+     <select id="getBySpecificCode_code"  parameterType="String"  resultType="com.bantu.ssm.entity.specificCode.SpecificCode" >
+           <!-- 调用公共配置  -->
+         select specificCode_id ,specificCode_userid, specificCode_code,specificCode_picpath,specificCode_shorturl,specificCode_addtime,specificCode_longurl  from tb_specificcode  where specificCode_code=#{specificCode_code}
+     </select>
+     
+      <!-- 添加 信息-->
+     <insert id="add" parameterType="com.bantu.ssm.entity.specificCode.SpecificCode"  >
+         <!-- 使用实体传值，必须和属性完全一致 -->
+          insert into tb_specificcode(specificCode_userid, specificCode_code,specificCode_picpath,specificCode_shorturl,specificCode_addtime,specificCode_longurl ) values(#{specificCode_userid},#{specificCode_code},#{specificCode_picpath},#{specificCode_shorturl}
+          ,#{specificCode_addtime},#{specificCode_longurl})
+     </insert>
+  </mapper>

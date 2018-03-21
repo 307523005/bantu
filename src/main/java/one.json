@@ -1,0 +1,56 @@
+{
+  "words_result": [
+    {
+      "words": "11122中国(河南)经济贸易促进会",
+      "probability": {
+        "min": 0.908292,
+        "variance": 7.16E-4,
+        "average": 0.986441
+      }
+    },
+    {
+      "words": "执行秘书长",
+      "probability": {
+        "min": 0.996653,
+        "variance": 1.0E-6,
+        "average": 0.998262
+      }
+    },
+    {
+      "words": "王兴朝",
+      "probability": {
+        "min": 0.986087,
+        "variance": 3.2E-5,
+        "average": 0.992607
+      }
+    },
+    {
+      "words": "15515535669",
+      "probability": {
+        "min": 0.997618,
+        "variance": 1.0E-6,
+        "average": 0.998917
+      }
+    },
+    {
+      "words": "地址:郑汴路138号英协广场A座1510-1511室",
+      "probability": {
+        "min": 0.942158,
+        "variance": 1.22E-4,
+        "average": 0.996451
+      }
+    },
+    {
+      "words": "电话:0371-86073011传真:0371-86073011",
+      "probability": {
+        "min": 0.906514,
+        "variance": 3.04E-4,
+        "average": 0.99411
+      }
+    }
+  ],
+  "direction": 3,
+  "words_result_num": 6,
+  "language": 3,
+  "log_id": 5624607697006649347
+}

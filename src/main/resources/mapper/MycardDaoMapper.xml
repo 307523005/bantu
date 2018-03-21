@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bantu.ssm.dao.mycard.MycardDao">
+	<!--公共信息查询语句 -->
+	<sql id="sel">
+		select m.mycard_id, c.cardcase_cardid mycard_cardid ,c.cardcase_uid
+		mycard_uid,
+		m.mycard_name,m.mycard_position,
+		m.mycard_mobile,m.mycard_companyname,
+		m.mycard_phone,
+		m.mycard_mail,m.mycard_add,m.mycard_website,
+		m.mycard_profile,m.mycard_scope,
+		c.cardcase_addtime mycard_addtime,
+		m.mycard_templateid,c.cardcase_ismy mycard_ismy,m.mycard_initial,
+		c.cardcase_iscompile mycard_iscompile,c.cardcase_isdelete
+		mycard_Isdelete,m.mycard_iseffective from
+		tb_cardcase c
+		LEFT JOIN tb_mycard m on
+		c.cardcase_cardid=m.mycard_cardid
+	</sql>
+	<!-- 根据mycard_cardid和uid得到一张名片的详细信息  ，查询用户名片夹或者待接受夹是否已有改名片-->
+	<select id="getCardByCardId" parameterType="com.bantu.ssm.entity.mycard.Mycard"
+		resultType="com.bantu.ssm.entity.mycard.Mycard">
+		<include refid="sel"></include>
+		where c.cardcase_cardid=#{mycard_cardid} and c.cardcase_uid =#{mycard_uid} and
+		c.cardcase_isdelete in(0,2) and m.mycard_iseffective = 0
+<!-- 			select 
+		mycard_cardid ,
+		mycard_uid,
+		mycard_name,
+		mycard_position,
+		mycard_mobile,
+		mycard_companyname,
+		mycard_phone,
+		mycard_mail,
+		mycard_add,
+		mycard_website,
+		mycard_profile,
+		mycard_scope,
+		mycard_templateid,
+		mycard_initial
+		 from
+		tb_mycard 
+		
+		where mycard_cardid = #{mycard_cardid}  -->
+	</select>
+	<!--根据uid cid  查看是不是自己编辑的名片  -->
+	<select id="getIscompile" parameterType="com.bantu.ssm.entity.mycard.Mycard"
+		resultType="com.bantu.ssm.entity.mycard.Mycard">
+		<include refid="sel"></include>
+		where c.cardcase_cardid=#{mycard_cardid} and c.cardcase_uid =#{mycard_uid} and
+		c.cardcase_isdelete = 0 and m.mycard_iseffective = 0 and c.cardcase_iscompile = 1
+	</select>
+
+	<!-- 根据mycard_uid得到自己的名片 -->
+	<select id="getMycardByUid" parameterType="string"
+		resultType="com.bantu.ssm.entity.mycard.Mycard">
+		<include refid="sel"></include>
+		where c.cardcase_uid=#{cardcase_uid} and c.cardcase_ismy = 1 and
+		c.cardcase_isdelete = 0 and m.mycard_iseffective = 0 order by mycard_initial   asc
+	</select>
+	<!-- 根据mycard_uid得到自己的名片夹名片 -->
+	<select id="getMyCardcaseByUid" parameterType="string"
+		resultType="com.bantu.ssm.entity.mycard.Mycard">
+		<include refid="sel"></include>
+		where c.cardcase_uid=#{cardcase_uid} and c.cardcase_ismy = 0 and
+		c.cardcase_isdelete = 0  order by mycard_initial  asc  
+	</select>
+	<!-- 根据mycard_uid得到自己的待保存名片 -->
+	<select id="getAwaitAddCard" parameterType="string"
+		resultType="com.bantu.ssm.entity.mycard.Mycard">
+		<include refid="sel"></include>
+		where c.cardcase_uid=#{cardcase_uid} and c.cardcase_ismy = 0 and
+		c.cardcase_isdelete = 2  order by mycard_initial  asc  
+	</select>
+	<!--添加名片信息-->
+	<insert id="addCardcase" parameterType="com.bantu.ssm.entity.mycard.Mycard">
+		insert into tb_mycard(
+		mycard_cardid,
+		mycard_uid,
+		mycard_name,
+		mycard_position,
+		mycard_mobile,
+		mycard_companyname,
+		mycard_phone,
+		mycard_mail,
+		mycard_add,
+		mycard_website,
+		mycard_profile,
+		mycard_scope,
+		mycard_templateid,
+		mycard_initial,
+		mycard_iseffective
+		)
+		values(
+		#{mycard_cardid},
+		#{mycard_uid},
+		#{mycard_name},
+		#{mycard_position},
+		#{mycard_mobile},
+		#{mycard_companyname},
+		#{mycard_phone},
+		#{mycard_mail},
+		#{mycard_add},
+		#{mycard_website},
+		#{mycard_profile},
+		#{mycard_scope},
+		#{mycard_templateid},
+		#{mycard_initial},
+		0)
+	</insert>
+
+	<!--手动自动添加我的名片夹 -->
+	<insert id="addCard" parameterType="com.bantu.ssm.entity.mycard.Cardcase">
+		insert into tb_cardcase(
+		cardcase_uid,
+		cardcase_cardid,
+		cardcase_isdelete,
+		cardcase_iscompile,
+		cardcase_ismy,
+		cardcase_addtime
+		)
+		values(
+		#{cardcase_uid},
+		#{cardcase_cardid},
+		0,
+		#{cardcase_iscompile},
+		#{cardcase_ismy},
+		#{cardcase_addtime})
+	</insert>
+	<!--将自己的名片发送给他人为待保存名片 -->
+	<insert id="awaitAddCard" parameterType="com.bantu.ssm.entity.mycard.Cardcase">
+		insert into tb_cardcase(
+		cardcase_uid,
+		cardcase_cardid,
+		cardcase_isdelete,
+		cardcase_iscompile,
+		cardcase_ismy,
+		cardcase_addtime
+		)
+		values(
+		#{cardcase_uid},
+		#{cardcase_cardid},
+		2,
+		0,
+		0,
+		#{cardcase_addtime})
+	</insert>
+	<!--保存，待保存名片-->
+	<update id="saveAwaitAddCard" parameterType="com.bantu.ssm.entity.mycard.Cardcase">
+		update tb_cardcase
+		<set>
+			cardcase_isdelete=0
+		</set>
+		where cardcase_cardid = #{cardcase_cardid} and cardcase_uid = #{cardcase_uid} and cardcase_isdelete = 2
+	</update>
+	<!-- 修改名片信息 -->
+	<update id="update" parameterType="com.bantu.ssm.entity.mycard.Mycard">
+		update tb_mycard
+		<set>
+			<if test="mycard_name!=null">
+				mycard_name = #{mycard_name},
+			</if>
+			<if test="mycard_position!=null">
+				mycard_position = #{mycard_position},
+			</if>
+			<if test="mycard_mobile!=null">
+				mycard_mobile = #{mycard_mobile},
+			</if>
+			<if test="mycard_companyname!=null">
+				mycard_companyname = #{mycard_companyname},
+			</if>
+			<if test="mycard_phone!=null">
+				mycard_phone = #{mycard_phone},
+			</if>
+			<if test="mycard_mail!=null">
+				mycard_mail = #{mycard_mail},
+			</if>
+			<if test="mycard_add  !=null">
+				mycard_add = #{mycard_add},
+			</if>
+			<if test="mycard_website!=null">
+				mycard_website = #{mycard_website},
+			</if>
+			<if test="mycard_profile!=null">
+				mycard_profile = #{mycard_profile},
+			</if>
+			<if test="mycard_scope!=null">
+				mycard_scope = #{mycard_scope},
+			</if>
+			<if test="mycard_templateid!=null">
+				mycard_templateid = #{mycard_templateid},
+			</if>
+			<if test="mycard_initial!=null">
+				mycard_initial = #{mycard_initial},
+			</if>
+		</set>
+		where mycard_cardid = #{mycard_cardid}
+	</update>
+	<!--删除 -->
+	<update id="delete" parameterType="com.bantu.ssm.entity.mycard.Cardcase">
+		update tb_cardcase
+		<set>
+			cardcase_isdelete=1
+		</set>
+		where cardcase_cardid = #{cardcase_cardid} and cardcase_uid = #{cardcase_uid} and cardcase_isdelete in (0,2)
+	</update>
+	<update id="deleteMycard" parameterType="com.bantu.ssm.entity.mycard.Mycard">
+		update tb_mycard
+		<set>
+			mycard_iseffective=1
+		</set>
+		where mycard_cardid = #{mycard_cardid} and  mycard_iseffective = 0
+	</update>
+	<!-- 根据cardcase_cardid 得到名片原始主人cardcase_uid -->
+	<select id="getPrimitiveUid" parameterType="string"
+		resultType="com.bantu.ssm.entity.mycard.Cardcase">
+		select * from tb_cardcase where cardcase_ismy = 1 and
+		cardcase_isdelete = 0
+		and cardcase_cardid=#{cardcase_cardid}
+	</select>
+</mapper>

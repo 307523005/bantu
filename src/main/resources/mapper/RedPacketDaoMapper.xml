@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bantu.ssm.dao.wx.RedPacketDao">
+	<!-- 得到所有反馈信息 -->
+	<!-- <select id="getList" resultType="com.bantu.ssm.entity.wx.RedPacket"> 
+		select redpacket_code ,redpacket_payuid,redpacket_money,redpacket_receiveopenId, 
+		redpacket_effectivity,redpacket_paytime,redpacket_receivetime from tb_redpacket 
+		</select> -->
+
+	<!-- 添加 红包 -->
+	<insert id="addRedPacket" parameterType="com.bantu.ssm.entity.wx.RedPacket">
+		<!-- 使用实体传值，必须和属性完全一致 -->
+		insert into tb_redpacket(
+		redpacket_code,
+		redpacket_payuid,
+		redpacket_money,
+		redpacket_paytime,
+		redpacket_effectivity
+		)
+		values(
+		#{redpacket_code},#{redpacket_payuid},#{redpacket_money},#{redpacket_paytime},1
+		)
+	</insert>
+	<!--领取红包 -->
+	<update id="receiveRedPacket" parameterType="com.bantu.ssm.entity.wx.RedPacket">
+		update tb_redpacket
+
+		<set>
+			redpacket_receiveopenId = #{redpacket_receiveopenId}
+		</set>
+		<set>
+			redpacket_receivetime = #{redpacket_receivetime}
+		</set>
+		<set>
+			redpacket_effectivity = 0
+		</set>
+		where redpacket_code = #{redpacket_code} and redpacket_effectivity = 1
+	</update>
+</mapper>
